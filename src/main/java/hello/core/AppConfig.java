@@ -1,0 +1,28 @@
+package hello.core;
+
+import hello.core.discount.DiscountPolicy;
+import hello.core.discount.FixDiscountPolicy;
+import hello.core.domain.MemberRepository;
+import hello.core.domain.MemberService;
+import hello.core.domain.MemberServiceImpl;
+import hello.core.domain.MemoryMemberRepository;
+import hello.core.order.OrderService;
+import hello.core.order.OrderServiceImpl;
+
+public class AppConfig {
+    public MemberService memberService () {
+        return new MemberServiceImpl(memberRepository());
+    }
+
+    public MemberRepository memberRepository () {
+        return new MemoryMemberRepository();
+    }
+
+    public OrderService orderService () {
+        return new OrderServiceImpl(memberRepository(), discountPolicy());
+    }
+
+    public DiscountPolicy discountPolicy () {
+        return new FixDiscountPolicy();
+    }
+}
