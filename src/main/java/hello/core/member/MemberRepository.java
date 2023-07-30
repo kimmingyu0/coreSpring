@@ -1,6 +1,4 @@
-package hello.core.domain;
-
-import hello.core.domain.Member;
+package hello.core.member;
 
 public interface MemberRepository {
     void save(Member member);

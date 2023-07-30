@@ -1,10 +1,9 @@
 package hello.core.order;
 
 import hello.core.AppConfig;
-import hello.core.domain.Grade;
-import hello.core.domain.Member;
-import hello.core.domain.MemberService;
-import hello.core.domain.MemberServiceImpl;
+import hello.core.member.Grade;
+import hello.core.member.Member;
+import hello.core.member.MemberService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ public class OrderServiceTest {
         Member member = new Member(memberId, "memberA", Grade.VIP);
         memberService.join(member);
 
-        Order order = orderService.createOrder(memberId, "itemA", 100000);
+        Order order = orderService.createOrder(memberId, "itemA", 10000);
         Assertions.assertEquals(order.getDiscountPrice(), 1000);
     }
 }
