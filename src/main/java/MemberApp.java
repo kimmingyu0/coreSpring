@@ -10,7 +10,6 @@ public class MemberApp {
         memberService.join(member);
 
         Member findMember = memberService.findMember(1L);
-        System.out.println(findMember.toString());
-
+        System.out.println(findMember);
     }
 }
