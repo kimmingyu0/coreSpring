@@ -24,8 +24,11 @@ public class AutoAppConfig {
     // Override를 해주지만, SpringApplication 실행시 오류 발생한다.
     // 자동으로 bean override를 false로 설정해놨기 때문이다.
     // spring.main.allow-bean-definition-overriding=true 이 속성을 주면 bean override가 활성화 됨
+    /*
     @Bean(name = "memoryMemberRepository")
     MemberRepository memberRepository() {
         return new MemoryMemberRepository();
     }
+
+     */
 }
