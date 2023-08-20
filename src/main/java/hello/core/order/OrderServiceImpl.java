@@ -5,10 +5,11 @@ import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     /**
@@ -41,11 +42,29 @@ public class OrderServiceImpl implements OrderService {
      * 수정자 주입을 포함한 나머지 주입 방식은 모두 생성자 이후에 호출되므로,
      * 필드에 final 키워드를 사용할 수 없다.
      */
-//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-//        System.out.println("1. OrderServiceImpl.OrderServiceImpl");
-//        this.memberRepository = memberRepository;
-//        this.discountPolicy = discountPolicy;
-//    }
+    
+    /**
+     * @Autowired 시 조회 대상 빈이 2개 이상일 때 해결방법
+     * @Autowired 필드 명 매칭
+     * -> 타입 매칭을 시도하고, 이 때 여러빈이 있으면 필드 이름, 파라미터 이름으로 추가 매칭한다.
+     * @Quilifier -> @Quilifier 끼리 매칭 -> 빈 이름 매칭
+     * -> 추가 구분자를 제공하는 것 일뿐. 빈 이름을 변경하는 것이 아니다.
+     * @Primary 사용
+     * -> 현재 DiscountPolicy 자료형의 빈이 FixDiscountPolicy, RateDiscountPolicy 두 종류가 있는데
+     * @Primary 가 붙은 RateDiscountPolicy 가 우선 순위를 가져서 자동 주입됨.
+     *
+     * 우선 순위 (@Primary, @Quilifier)
+     * @Primary 는 기본값 처럼 동작하는 것이고, @Quilifier 는 매우 상세하게 동작한다.
+     * 스프링은 자동보다는 수동이, 넓은 범위의 선택권 보다는 좁은 범위의 선택권이 우선순위가 높다.
+     * 따라서 @Quilifier 가 우선권이 높다.
+     *
+     * */
+    @Autowired
+    public OrderServiceImpl(MemberRepository memberRepository, /*@Qualifier("mainDiscountPolicy")*/ DiscountPolicy discountPolicy) {
+        System.out.println("1. OrderServiceImpl.OrderServiceImpl");
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
 
     /**
      * 수정자 주입
