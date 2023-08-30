@@ -1,7 +1,9 @@
 package hello.core.scope;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
 
@@ -44,20 +46,30 @@ public class SingletonWithPrototypeTest1 {
 
         ClientBean clientBean2 = ac.getBean(ClientBean.class);
         int count2 = clientBean2.logic();
-        assertEquals(count2, 2);
+        assertEquals(count2, 1);
     }
 
     @Scope("singleton")
     static class ClientBean {
-        private final PrototypeBean prototypeBean; // 생성시점에 주입
-
-        public ClientBean(PrototypeBean prototypeBean) {
-            this.prototypeBean = prototypeBean;
-        }
+//        @Autowired
+//        ApplicationContext context;
+        /**
+         * 주석 처리된 코드를 살펴보면 ApplicationContext를 주입받아서 Prototype 빈을 조회하는 식으로 되어있다.
+         * 그런데 이렇게 스프링의 애플리케이션 컨텍스트 전체를 주입받게 되면,
+         * 스프링 컨테이너에 종속적인 코드가 되고, 단위테스트가 어려워진다.
+         *
+         * 의존관계를 외부에서 주입(DI) 받는게 아니라 직접 필요한 의존관계를 찾는것을
+         * Dependency Lookup (DL) 의존관계 조회라고 한다.
+         * */
+        @Autowired
+        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
 
         public int logic() {
+//            PrototypeBean prototypeBean = context.getBean(PrototypeBean.class);
+            PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
             prototypeBean.addCount();
-            return prototypeBean.getCount();
+            int count = prototypeBean.getCount();
+            return count;
         }
     }
 
