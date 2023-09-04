@@ -1,6 +1,7 @@
 package hello.core.common;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
@@ -19,8 +20,13 @@ import java.util.UUID;
  * application : 서블릿 컨텍스트와 동일한 생명주기를 가지는 스코프
  * websocket : 웹 소켓과 동일한 생명주기를 가지는 스코프
  * */
+
+/**
+ * proxyMode = ScopeProxyMode.TARGET_CLASS 를 추가함으로 인해
+ * MyLogger 의 Proxy Object 를 만들고, HTTP Request 와 상관 없이 Proxy Object 를 다른 빈에 미리 주입해 둘 수 있다.
+ * */
 @Controller
-@Scope(value = "request")
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class MyLogger {
 
     private String uuid;
